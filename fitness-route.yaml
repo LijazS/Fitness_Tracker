@@ -8,10 +8,16 @@ spec:
     - name: new-gateway
       namespace: default
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /
+    - matches: 
+        - path: 
+            type: PathPrefix 
+            value: /fitness
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
       backendRefs:
-        - name: fitness-tracker-service
-          port: 80
+        - name: fitness-service
+          port: 5000   
