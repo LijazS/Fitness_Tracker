@@ -6,7 +6,7 @@ metadata:
 spec:
   parentRefs:
     - name: new-gateway
-      namespace: default
+      namespace: l-ns
   rules:
     - matches: 
         - path: 
