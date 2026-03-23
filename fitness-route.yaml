@@ -14,4 +14,4 @@ spec:
             value: /
       backendRefs:
         - name: fitness-tracker-service
-          port: 80   
+          port: 5000 

@@ -57,6 +57,6 @@ spec:
   selector:
     app: fitness-tracker-app
   ports:
-  - port: 80
+  - port: 5000
     targetPort: 5000
   type: ClusterIP
