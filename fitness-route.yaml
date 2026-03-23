@@ -11,13 +11,7 @@ spec:
     - matches: 
         - path: 
             type: PathPrefix 
-            value: /fitness
-      filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: /
+            value: /
       backendRefs:
         - name: fitness-tracker-service
           port: 80   
