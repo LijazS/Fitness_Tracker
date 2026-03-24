@@ -25,8 +25,8 @@ spec:
           # ✔ All configMap vars removed
           # ✔ Direct env variables added
           envFrom:
-            configMapRef:
-              - name: fitness-configmap
+            - configMapRef:
+                name: fitness-configmap
           env:
             # Datadog APM (tracing) env variables
             - name: DD_AGENT_HOST
