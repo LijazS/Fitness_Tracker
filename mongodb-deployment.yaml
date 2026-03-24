@@ -37,6 +37,7 @@ spec:
       - name: mongodb-storage
         emptyDir:
           sizeLimit: "500Mi"
+          medium: memory
 ---
 apiVersion: v1
 kind: Service
