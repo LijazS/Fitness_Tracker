@@ -2,6 +2,7 @@ apiVersion: v1
 kind: persistentVolumeReclaimClaim
 metadata: 
   name: fitness-pvc
+  namespace: l-ns
 spec:
   accessModes:
   - ReadWriteMany
