@@ -35,9 +35,9 @@ spec:
           mountPath: /data/db
       volumes:
       - name: mongodb-storage
-        hostPath:
-          path: /data/mydata  
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: fitness-pvc
+        
 ---
 apiVersion: v1
 kind: Service
