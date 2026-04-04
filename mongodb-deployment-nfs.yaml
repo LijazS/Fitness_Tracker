@@ -18,6 +18,12 @@ spec:
       labels:
         app: mongodb
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: 
       containers:
       - name: mongodb
         image: mongo:7-jammy

@@ -18,6 +18,12 @@ spec:
       labels:
         app: mongodb
     spec:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app: fitness-tracker-app
+          topologyKey: kubernetes.io
       containers:
       - name: mongodb
         image: mongo:7-jammy
