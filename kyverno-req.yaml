@@ -1,16 +1,26 @@
-apiVersion: policies.kyverno.io/v1alpha1
-kind: ValidatingPolicy
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
 metadata:
-  name: require-req-and-limits
+  name: require-resources
 spec:
-  validationActions:
-    - Deny
-  matchConstraints:
-    resourceRules:
-      - apiGroups: ['apps']
-        apiVersions: ['v1']
-        operations: ['CREATE', 'UPDATE']
-        resources: ['Deployment']
-  validations:
-    - message: "resources must be defined"
-      expression: "object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits))"
+  validationFailureAction: Enforce
+  rules:
+  - name: check-resources
+    match:
+      resources:
+        kinds:
+        - Deployment
+    validate:
+      message: "All containers must have requests and limits"
+      pattern:
+        spec:
+          template:
+            spec:
+              containers:
+              - resources:
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
