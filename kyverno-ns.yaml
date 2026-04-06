@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-ns
+spec:
+  validationFailureAction: Enforce
+  rules:
+  - name: check-resources
+    match:
+      resources:
+        kinds:
+        - Deployment
+        - Service
+        - HTTPRoute
+        - Pod
+    validate:
+      message: "All deploy,svc,routes,pods must be in l-ns ns"
+      pattern:
+        metadata:
+          namespace: "l-ns"

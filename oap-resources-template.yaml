@@ -12,23 +12,18 @@ spec:
     rego: |
       package k8srequiredresources
 
+      # For Pods
       violation[{"msg": msg}] {
         input.review.kind.kind == "Pod"
         container := input.review.object.spec.containers[_]
         not container.resources
-        msg := sprintf("Container %v must have resources defined", [container.name])
+        msg := sprintf("Pod container %v missing resources", [container.name])
       }
 
+      # For Deployments
       violation[{"msg": msg}] {
-        input.review.kind.kind == "Pod"
-        container := input.review.object.spec.containers[_]
-        not container.resources.requests
-        msg := sprintf("Container %v must have resource requests", [container.name])
-      }
-
-      violation[{"msg": msg}] {
-        input.review.kind.kind == "Pod"
-        container := input.review.object.spec.containers[_]
-        not container.resources.limits
-        msg := sprintf("Container %v must have resource limits", [container.name])
+        input.review.kind.kind == "Deployment"
+        container := input.review.object.spec.template.spec.containers[_]
+        not container.resources
+        msg := sprintf("Deployment container %v missing resources", [container.name])
       }
