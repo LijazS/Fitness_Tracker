@@ -26,7 +26,7 @@ spec:
       - key: "app"
         operator: "Equal"
         value: "myapp"
-        effect: "NoSechedule"
+        effect: "NoSchedule"
       containers:
         - name: fitness-tracker-app
           image: pulkit197/fitness_tracker-master-copy3-fitness-app:latest
