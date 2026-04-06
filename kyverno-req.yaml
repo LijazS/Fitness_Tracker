@@ -13,4 +13,4 @@ spec:
         resources: ['Deployment']
   validations:
     - message: "resources must be defined"
-      expression: "has(object.spec.template.spec.containers.resources) && has(object.spec.template.spec.containers.resources.requests) && has(object.spec.template.spec.containers.resources.limits) && object.spec.template.spec.containers.resources.requests != '' && object.spec.template.spec.containers.resources.requests != '' "
+      expression: "object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits))"
