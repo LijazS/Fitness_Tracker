@@ -16,9 +16,7 @@ spec:
       violation[{"msg": msg}] {
         input.review.kind.kind == "Pod"
         container := input.review.object.spec.containers[_]
-
         not has_resources(container)
-
         msg := sprintf("Pod container %v must have requests and limits", [container.name])
       }
 
@@ -26,9 +24,7 @@ spec:
       violation[{"msg": msg}] {
         input.review.kind.kind == "Deployment"
         container := input.review.object.spec.template.spec.containers[_]
-
         not has_resources(container)
-
         msg := sprintf("Deployment container %v must have requests and limits", [container.name])
       }
 
@@ -37,5 +33,4 @@ spec:
         container.resources
         container.resources.requests
         container.resources.limits
-      }sprintf("Deployment container %v missing resources", [container.name])
-            }
+      }
