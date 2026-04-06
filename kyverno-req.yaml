@@ -1,0 +1,16 @@
+apiVersion: policies.kyverno.io/v1alpha1
+kind: ValidatingPolicy
+metadata:
+  name: require-req-and-limits
+spec:
+  validationActions:
+    - Deny
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ['']
+        apiVersions: ['v1']
+        operations: ['CREATE', 'UPDATE']
+        resources: ['Deployment']
+  validations:
+    - message: "resources must be defined"
+      expression: "has(object.spec.template.spec.containers.resources) && has(object.spec.template.spec.containers.resources.requests) && has(object.spec.template.spec.containers.resources.limits) && object.spec.template.spec.containers.resources.requests != '' && object.spec.template.spec.containers.resources.requests != '' "
