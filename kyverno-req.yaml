@@ -7,7 +7,7 @@ spec:
     - Deny
   matchConstraints:
     resourceRules:
-      - apiGroups: ['']
+      - apiGroups: ['apps']
         apiVersions: ['v1']
         operations: ['CREATE', 'UPDATE']
         resources: ['Deployment']
