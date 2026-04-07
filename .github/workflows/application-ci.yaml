@@ -1,0 +1,31 @@
+name: Build and Scan Image
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Get code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t fitness-app:latest .
+
+      # 3. Scan image using Trivy
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@v0.20.0
+        with:
+          image-ref: fitness-app:latest
+          format: table
+          exit-code: 1
+          severity: CRITICAL,HIGH
+
+      - name: Print finish
+        run: echo "scan finished byw"
