@@ -14,7 +14,7 @@ spec:
         - HTTPRoute
         - Pod
     validate:
-      message: "All deploy,svc,routes,pods must be in l-ns ns"
+      message: "All deploys,svc,routes,pods must be in l-ns ns"
       pattern:
         metadata:
           namespace: "l-ns"
