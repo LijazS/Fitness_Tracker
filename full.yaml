@@ -1,245 +1,137 @@
-
- 
- 
-# ---
-
-# apiVersion: v1
-
-# kind: PersistentVolumeClaim
-
-# metadata:
-
-#   name: mongodb-pvc
-
-#   namespace: l-ns
-
-# spec:
-
-#   accessModes:
-
-#     - ReadWriteOnce
-
-#   resources:
-
-#     requests:
-
-#       storage: 2Gi
- 
-
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
   name: mongodb
-
   namespace: l-ns
-
 spec:
-
   replicas: 1
 
   strategy:
-
     type: Recreate
 
   selector:
-
     matchLabels:
-
       app: mongodb
 
   template:
-
     metadata:
-
       labels:
-
         app: mongodb
 
     spec:
-
       containers:
-
         - name: mongodb
-
           image: mongo:7-jammy
 
           ports:
+            - name: mongodb
+              containerPort: 27017
 
-            - containerPort: 27017
- 
-          resources:
-
-            requests:
-
-              memory: "256Mi"
-
-              cpu: "100m"
-
-            limits:
-
-              memory: "512Mi"
-
-              cpu: "200m"
- 
           env:
-
- 
             - name: MONGO_INITDB_DATABASE
+              value: fitness-tracker
 
-              value: "fitness-tracker"
- 
-      #     volumeMounts:
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 200m
 
-      #       - name: mongodb-storage
-
-      #         mountPath: /data/db
- 
-
- 
-      # volumes:
-
-      #   - name: mongodb-storage
-
-      #     persistentVolumeClaim:
-
-      #       claimName: mongodb-pvc
- 
- 
 ---
-
 apiVersion: v1
-
 kind: Service
-
 metadata:
-
   name: mongodb-service
-
   namespace: l-ns
-
 spec:
-
   type: ClusterIP
 
   selector:
-
     app: mongodb
 
   ports:
+    - name: mongodb
+      port: 27017
+      targetPort: mongodb
 
-    - port: 27017
-
-      targetPort: 27017
- 
 ---
-
 apiVersion: apps/v1
-
 kind: Deployment
-
 metadata:
-
   name: fitness-tracker-app
-
   namespace: l-ns
-
 spec:
-
   replicas: 2
 
   strategy:
-
     type: RollingUpdate
-
     rollingUpdate:
-
       maxUnavailable: 1
-
       maxSurge: 1
- 
+
   selector:
-
     matchLabels:
-
       app: fitness-tracker-app
- 
+
   template:
-
     metadata:
-
       labels:
-
         app: fitness-tracker-app
- 
+
     spec:
-
       tolerations:
+        - key: app
+          operator: Equal
+          value: myapp
+          effect: NoSchedule
 
-        - key: "app"
-
-          operator: "Equal"
-
-          value: "myapp"
-
-          effect: "NoSchedule"
- 
       containers:
-
         - name: fitness-tracker-app
 
-          image: fitnesstr.azurecr.io/fitness-lijaz:latest
+          # This must match the repository pushed by your Azure pipeline.
+          image: fitnessacr.azurecr.io/fitnessapp:latest
 
           ports:
+            - name: http
+              containerPort: 5000
 
-            - containerPort: 5000
- 
           env:
-
             - name: MONGODB_URI
+              value: mongodb://mongodb-service.l-ns.svc.cluster.local:27017/fitness-tracker
 
-              value: "mongodb://mongodb-service.l-ns.svc.cluster.local:27017/fitness-tracker?authSource=admin"
- 
             - name: PORT
-
               value: "5000"
- 
+
             - name: HOST
+              value: 0.0.0.0
 
-              value: "0.0.0.0"
- 
             - name: NODE_ENV
+              value: production
 
-              value: "production"
- 
-  
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 500m
+
 ---
-
 apiVersion: v1
-
 kind: Service
-
 metadata:
-
   name: fitness-tracker-service
-
   namespace: l-ns
-
 spec:
-
   type: ClusterIP
 
   selector:
-
     app: fitness-tracker-app
 
   ports:
+    - name: http
+      port: 80
+      targetPort: http
 
-    - port: 80
-
-      targetPort: 5000
- 
-mongo-root-username
- 
