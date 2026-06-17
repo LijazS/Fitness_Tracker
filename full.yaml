@@ -1,10 +1,4 @@
-apiVersion: v1
 
-kind: Namespace
-
-metadata:
-
-  name: l-ns
  
  
 # ---
@@ -31,7 +25,6 @@ metadata:
 
 #       storage: 2Gi
  
----
 
 apiVersion: apps/v1
 
